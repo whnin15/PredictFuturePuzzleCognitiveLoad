@@ -10,7 +10,7 @@ dotogether-e.lgp,T,1,dotogether-l.lgp,-2.5,dotogether-f.lgp,-2.0,dotogether-g.lg
 dotogether-l.lgp,T,-2,dotogether-l.lgp,-2.3,dotogether-f.lgp,-1.8,dotogether-g.lgp,-1.8,dotogether-i.lgp,-1.5,dotogether-j.lgp,-1.4000001,dotogether-h.lgp,-1.4000001,dotogether-k.lgp,-1.4000001
 dotogether-f.lgp,T,-2,dotogether-f.lgp,-1.8,dotogether-g.lgp,-1.8,dotogether-i.lgp,-1.5,dotogether-j.lgp,-1.4000001,dotogether-h.lgp,-1.4000001,dotogether-k.lgp,-1.4000001
 dotogether-i.lgp,T,5,dotogether-i.lgp,0.0,dotogether-j.lgp,0.099999905,dotogether-g.lgp,0.099999905,dotogether-h.lgp,0.099999905,dotogether-k.lgp,0.099999905
-dotogether-i.lgp,T,1,dotogether-j.lgp,0.099999905,dotogether-g.lgp,0.099999905,dotogether-h.lgp,0.099999905,dotogether-k.lgp,0.099999905
+dotogether-i.lgp,T,1,dotogether-i.lgp,0.0,dotogether-j.lgp,0.099999905,dotogether-g.lgp,0.099999905,dotogether-h.lgp,0.099999905,dotogether-k.lgp,0.099999905
 dotogether-k.lgp,T,0,dotogether-j.lgp,0.099999905,dotogether-h.lgp,0.099999905,dotogether-k.lgp,0.099999905,dotogether-g.lgp,0.19999981
 dotogether-j.lgp,T,1,dotogether-j.lgp,-0.099999905,dotogether-g.lgp,-0.099999905,dotogether-h.lgp,-0.099999905
 dotogether-g.lgp,T,-2,dotogether-g.lgp,-0.20000005,dotogether-h.lgp,0.0
@@ -27,14 +27,14 @@ repeat-cc.lgp,CbCe,2,repeat-ff.lgp,0.5,repeat-hh.lgp,0.5,repeat-cc.lgp,0.5,repea
 repeat-dd.lgp,CbCe,2,repeat-ff.lgp,0.9000001,repeat-hh.lgp,0.9000001,repeat-c.lgp,0.9000001,repeat-ii.lgp,0.9000001,repeat-dd.lgp,1.5
 repeat-c.lgp,CbCe,0,repeat-ff.lgp,1.0999999,repeat-hh.lgp,1.0999999,repeat-c.lgp,1.0999999,repeat-ii.lgp,1.0999999
 repeat-hh.lgp,CbCe,5,repeat-ff.lgp,1.6999998,repeat-hh.lgp,1.6999998,repeat-ii.lgp,1.6999998
-repeat-ii.lgp,CbCe,-1,repeat-ff.lgp,1.9000001,repeat-ii.lgp,1.9000001
-repeat-hh.lgp,CbCe,2,repeat-ff.lgp,1.6999998
+repeat-ii.lgp,CbCe,-1,repeat-ff.lgp,1.9000001,repeat-hh.lgp,1.9000001,repeat-ii.lgp,1.9000001
+repeat-hh.lgp,CbCe,2,repeat-ff.lgp,1.6999998,repeat-hh.lgp,1.6999998
 repeat-ff.lgp,CbCe,1,repeat-ff.lgp,2.0
 repeat-o.lgp,CbTe,-1,repeat-n.lgp,-1.5999999,repeat-i.lgp,-1.5999999,repeat-o.lgp,-1.5999999,repeat-j.lgp,-1.5999999
 repeat-j.lgp,CbTe,-1,repeat-i.lgp,-1.7,repeat-j.lgp,-1.7,repeat-n.lgp,-1.5
 repeat-i.lgp,CbTe,-2,repeat-i.lgp,-1.9000001,repeat-n.lgp,-1.7
 repeat-n.lgp,CbTe,5,repeat-n.lgp,-1.9000001
-repeat-n.lgp,CbTe,3
+repeat-n.lgp,CbTe,3,repeat-n.lgp,-1.9000001
 repeat-l.lgp,TbCe,0,repeat-r.lgp,1.0999999,repeat-p.lgp,1.5,repeat-q.lgp,1.5,repeat-w.lgp,1.5,repeat-y.lgp,1.5,repeat-x.lgp,1.5,repeat-l.lgp,1.5
 repeat-x.lgp,TbCe,0,repeat-p.lgp,0.099999905,repeat-q.lgp,0.099999905,repeat-w.lgp,0.099999905,repeat-y.lgp,0.099999905,repeat-x.lgp,0.099999905,repeat-r.lgp,0.5
 repeat-w.lgp,TbCe,-1,repeat-p.lgp,-0.4000001,repeat-q.lgp,-0.4000001,repeat-w.lgp,-0.4000001,repeat-y.lgp,-0.4000001,repeat-r.lgp,0.0

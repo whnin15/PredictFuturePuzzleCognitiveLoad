@@ -54,8 +54,8 @@ doinorder-u.lgp,TbObTee,-4,doinorder-t.lgp,-0.70000005,doinorder-bb.lgp,-0.70000
 doinorder-bb.lgp,TbObTee,4,doinorder-t.lgp,-2.2,doinorder-bb.lgp,-2.2,doinorder-h.lgp,-2.2,doinorder-e.lgp,-2.2,doinorder-v.lgp,-2.2,repeat-u.lgp,-2.2,doinorder-m.lgp,-2.2,doinorder-j.lgp,-2.2,doinorder-cc.lgp,-2.2
 doinorder-cc.lgp,TbObTee,-2,doinorder-t.lgp,-0.70000005,doinorder-h.lgp,-0.70000005,doinorder-e.lgp,-0.70000005,doinorder-v.lgp,-0.70000005,repeat-u.lgp,-0.70000005,doinorder-m.lgp,-0.70000005,doinorder-j.lgp,-0.70000005,doinorder-cc.lgp,-0.70000005
 doinorder-v.lgp,TbObTee,5,doinorder-t.lgp,-0.70000005,doinorder-h.lgp,-0.70000005,doinorder-e.lgp,-0.70000005,doinorder-v.lgp,-0.70000005,repeat-u.lgp,-0.70000005,doinorder-m.lgp,-0.70000005,doinorder-j.lgp,-0.70000005
-doinorder-h.lgp,TbObTee,-2,doinorder-t.lgp,-1.4000001,doinorder-h.lgp,-1.4000001,doinorder-e.lgp,-1.4000001,repeat-u.lgp,-1.4000001,doinorder-m.lgp,-1.4000001,doinorder-j.lgp,-1.4000001
-doinorder-v.lgp,TbObTee,-4,doinorder-t.lgp,-0.70000005,doinorder-e.lgp,-0.70000005,repeat-u.lgp,-0.70000005,doinorder-m.lgp,-0.70000005,doinorder-j.lgp,-0.70000005
+doinorder-h.lgp,TbObTee,-2,doinorder-t.lgp,-1.4000001,doinorder-h.lgp,-1.4000001,doinorder-e.lgp,-1.4000001,doinorder-v.lgp,-1.4000001,repeat-u.lgp,-1.4000001,doinorder-m.lgp,-1.4000001,doinorder-j.lgp,-1.4000001
+doinorder-v.lgp,TbObTee,-4,doinorder-t.lgp,-0.70000005,doinorder-e.lgp,-0.70000005,doinorder-v.lgp,-0.70000005,repeat-u.lgp,-0.70000005,doinorder-m.lgp,-0.70000005,doinorder-j.lgp,-0.70000005
 doinorder-j.lgp,TbObTee,-4,doinorder-t.lgp,-2.2,doinorder-e.lgp,-2.2,repeat-u.lgp,-2.2,doinorder-m.lgp,-2.2,doinorder-j.lgp,-2.2
 doinorder-e.lgp,TbObTee,-4,doinorder-t.lgp,-0.5999999,doinorder-e.lgp,-0.5999999,repeat-u.lgp,-0.5999999,doinorder-m.lgp,-0.5999999
 repeat-u.lgp,TbObTee,-4,doinorder-t.lgp,-2.0,repeat-u.lgp,-2.0,doinorder-m.lgp,-2.0

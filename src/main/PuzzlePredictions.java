@@ -157,7 +157,9 @@ public class PuzzlePredictions {
 						puzzle_prediction_map.put(puzzleName, prediction);
 					}
 				}
-				completed.add(puzzleUserDid);
+				if (Integer.parseInt(values[2]) < 5) {
+					completed.add(puzzleUserDid);
+				}
 				
 				HashMap<String, Float> sortedByValue = puzzle_prediction_map
 											.entrySet()

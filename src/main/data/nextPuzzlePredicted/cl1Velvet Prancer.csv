@@ -21,8 +21,8 @@ repeat-a.lgp,C,-4,repeat-a.lgp,-3.6,repeat-f.lgp,-3.4,repeat-g.lgp,-3.4
 repeat-cc.lgp,CbCe,-4,repeat-ff.lgp,-1.7,repeat-hh.lgp,-1.7,repeat-cc.lgp,-1.7,repeat-c.lgp,-1.7,repeat-ii.lgp,-1.7,repeat-dd.lgp,-1.7
 repeat-hh.lgp,CbCe,-3,repeat-ff.lgp,-2.0,repeat-hh.lgp,-2.0,repeat-c.lgp,-2.0,repeat-ii.lgp,-2.0,repeat-dd.lgp,-2.0
 repeat-ii.lgp,CbCe,5,repeat-ff.lgp,-2.0,repeat-c.lgp,-2.0,repeat-ii.lgp,-2.0,repeat-dd.lgp,-2.0
-repeat-c.lgp,CbCe,-4,repeat-ff.lgp,2.0,repeat-c.lgp,2.0,repeat-dd.lgp,2.0
-repeat-ff.lgp,CbCe,-4,repeat-ff.lgp,0.5,repeat-dd.lgp,0.5
+repeat-c.lgp,CbCe,-4,repeat-ff.lgp,2.0,repeat-c.lgp,2.0,repeat-ii.lgp,2.0,repeat-dd.lgp,2.0
+repeat-ff.lgp,CbCe,-4,repeat-ff.lgp,0.5,repeat-ii.lgp,0.5,repeat-dd.lgp,0.5
 repeat-i.lgp,CbTe,-4,repeat-o.lgp,-2.6,repeat-i.lgp,-2.5,repeat-j.lgp,-2.5,repeat-n.lgp,-2.4
 repeat-n.lgp,CbTe,-3,repeat-n.lgp,-2.8,repeat-o.lgp,-2.8,repeat-j.lgp,-2.8
 repeat-l.lgp,TbCe,0,repeat-q.lgp,-0.4000001,repeat-w.lgp,-0.4000001,repeat-l.lgp,-0.4000001,repeat-p.lgp,-0.29999995,repeat-y.lgp,-0.29999995,repeat-x.lgp,-0.29999995,repeat-r.lgp,-0.099999905

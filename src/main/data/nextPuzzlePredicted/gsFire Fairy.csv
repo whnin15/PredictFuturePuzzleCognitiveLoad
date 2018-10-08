@@ -42,10 +42,10 @@ doinorder-r.lgp,TbOe,-1,doinorder-y.lgp,-3.1,integrative-e.lgp,-3.1,integrative-
 doinorder-s.lgp,TbObTee,-3,doinorder-t.lgp,-0.099999905,doinorder-z.lgp,-0.099999905,doinorder-bb.lgp,-0.099999905,doinorder-h.lgp,-0.099999905,doinorder-s.lgp,-0.099999905,doinorder-e.lgp,-0.099999905,doinorder-v.lgp,-0.099999905,doinorder-u.lgp,-0.099999905,repeat-u.lgp,-0.099999905,doinorder-m.lgp,-0.099999905,doinorder-j.lgp,-0.099999905,doinorder-cc.lgp,-0.099999905
 doinorder-y.lgp,TbOe,-2,doinorder-y.lgp,-3.1,integrative-e.lgp,-2.6,integrative-h.lgp,-1.8,integrative-c.lgp,-1.0,integrative-b.lgp,-1.0
 doinorder-z.lgp,TbObTee,5,doinorder-t.lgp,-2.0,doinorder-z.lgp,-2.0,doinorder-bb.lgp,-2.0,doinorder-h.lgp,-2.0,doinorder-e.lgp,-2.0,doinorder-v.lgp,-2.0,doinorder-u.lgp,-2.0,repeat-u.lgp,-2.0,doinorder-m.lgp,-2.0,doinorder-j.lgp,-2.0,doinorder-cc.lgp,-2.0
-doinorder-j.lgp,TbObTee,-2,doinorder-t.lgp,-2.1,doinorder-bb.lgp,-2.1,doinorder-h.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-v.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-j.lgp,-2.1,doinorder-cc.lgp,-2.1
-doinorder-bb.lgp,TbObTee,-2,doinorder-t.lgp,-2.1,doinorder-bb.lgp,-2.1,doinorder-h.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-v.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-cc.lgp,-2.1
-doinorder-v.lgp,TbObTee,-3,doinorder-t.lgp,-2.0,doinorder-h.lgp,-2.0,doinorder-e.lgp,-2.0,doinorder-v.lgp,-2.0,doinorder-u.lgp,-2.0,repeat-u.lgp,-2.0,doinorder-m.lgp,-2.0,doinorder-cc.lgp,-2.0
-doinorder-h.lgp,TbObTee,-2,doinorder-t.lgp,-2.1,doinorder-h.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-cc.lgp,-2.1
-doinorder-e.lgp,TbObTee,-3,doinorder-t.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-cc.lgp,-2.1
-doinorder-cc.lgp,TbObTee,-2,doinorder-t.lgp,-2.0,doinorder-u.lgp,-2.0,repeat-u.lgp,-2.0,doinorder-m.lgp,-2.0,doinorder-cc.lgp,-2.0
+doinorder-j.lgp,TbObTee,-2,doinorder-t.lgp,-2.1,doinorder-z.lgp,-2.1,doinorder-bb.lgp,-2.1,doinorder-h.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-v.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-j.lgp,-2.1,doinorder-cc.lgp,-2.1
+doinorder-bb.lgp,TbObTee,-2,doinorder-t.lgp,-2.1,doinorder-z.lgp,-2.1,doinorder-bb.lgp,-2.1,doinorder-h.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-v.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-cc.lgp,-2.1
+doinorder-v.lgp,TbObTee,-3,doinorder-t.lgp,-2.0,doinorder-z.lgp,-2.0,doinorder-h.lgp,-2.0,doinorder-e.lgp,-2.0,doinorder-v.lgp,-2.0,doinorder-u.lgp,-2.0,repeat-u.lgp,-2.0,doinorder-m.lgp,-2.0,doinorder-cc.lgp,-2.0
+doinorder-h.lgp,TbObTee,-2,doinorder-t.lgp,-2.1,doinorder-z.lgp,-2.1,doinorder-h.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-cc.lgp,-2.1
+doinorder-e.lgp,TbObTee,-3,doinorder-t.lgp,-2.1,doinorder-z.lgp,-2.1,doinorder-e.lgp,-2.1,doinorder-u.lgp,-2.1,repeat-u.lgp,-2.1,doinorder-m.lgp,-2.1,doinorder-cc.lgp,-2.1
+doinorder-cc.lgp,TbObTee,-2,doinorder-t.lgp,-2.0,doinorder-z.lgp,-2.0,doinorder-u.lgp,-2.0,repeat-u.lgp,-2.0,doinorder-m.lgp,-2.0,doinorder-cc.lgp,-2.0
 repeat-bb.lgp,CbTe/TbCe,-1,repeat-aa.lgp,-1.7,repeat-bb.lgp,-1.5500001,repeat-z.lgp,-1.5500001,repeat-t.lgp,-1.5,repeat-s.lgp,-1.5

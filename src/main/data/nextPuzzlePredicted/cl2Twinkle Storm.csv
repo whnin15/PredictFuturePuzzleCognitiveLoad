@@ -32,9 +32,9 @@ repeat-x.lgp,TbCe,-1,repeat-r.lgp,-0.9000001,repeat-p.lgp,-0.5,repeat-q.lgp,-0.5
 repeat-q.lgp,TbCe,3,repeat-r.lgp,-0.099999905,repeat-p.lgp,0.3000002,repeat-q.lgp,0.3000002,repeat-w.lgp,0.3000002,repeat-y.lgp,0.3000002,repeat-l.lgp,0.3000002
 repeat-y.lgp,TbCe,1,repeat-r.lgp,0.5,repeat-p.lgp,0.9000001,repeat-w.lgp,0.9000001,repeat-y.lgp,0.9000001,repeat-l.lgp,0.9000001
 repeat-r.lgp,TbCe,5,repeat-p.lgp,0.19999981,repeat-r.lgp,0.19999981,repeat-w.lgp,0.5999999,repeat-l.lgp,0.5999999
-repeat-l.lgp,TbCe,1,repeat-p.lgp,0.5999999,repeat-w.lgp,0.5999999,repeat-l.lgp,0.5999999
-repeat-w.lgp,TbCe,1,repeat-p.lgp,0.0,repeat-w.lgp,0.0
-repeat-p.lgp,TbCe,-1,repeat-p.lgp,-0.5999999
+repeat-l.lgp,TbCe,1,repeat-r.lgp,0.19999981,repeat-p.lgp,0.5999999,repeat-w.lgp,0.5999999,repeat-l.lgp,0.5999999
+repeat-w.lgp,TbCe,1,repeat-r.lgp,-0.4000001,repeat-p.lgp,0.0,repeat-w.lgp,0.0
+repeat-p.lgp,TbCe,-1,repeat-p.lgp,-0.5999999,repeat-r.lgp,-0.20000005
 repeat-z.lgp,CbTe/TbCe,0,repeat-aa.lgp,-0.1500001,repeat-t.lgp,-0.1500001,repeat-s.lgp,-0.1500001,repeat-z.lgp,-0.1500001,repeat-bb.lgp,0.0
 repeat-s.lgp,CbTe/TbCe,2,repeat-aa.lgp,0.29999995,repeat-t.lgp,0.29999995,repeat-s.lgp,0.29999995,repeat-bb.lgp,0.45000005
 repeat-i.lgp,CbTe,-2,repeat-i.lgp,-1.5999999
