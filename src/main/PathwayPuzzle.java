@@ -65,6 +65,7 @@ public class PathwayPuzzle {
 	 private int structContent;
 	 private int uniqueStmts;
 	 private String structure;
+	 private String pathwayName;
 
 	 private int CCnt;
 	 private int CbCeCnt;
@@ -80,6 +81,7 @@ public class PathwayPuzzle {
 
 	public PathwayPuzzle(String line) {
 		String[] values = line.split(",");
+		
 		name = values[2];
 		difficulty = Integer.parseInt(values[4]);
 		lines = Integer.parseInt(values[6]);
@@ -95,6 +97,7 @@ public class PathwayPuzzle {
 		 structContent = Integer.parseInt(values[8]);;
 		 uniqueStmts = Integer.parseInt(values[9]);;
 		 structure = values[3];
+		 pathwayName = values[1];
 		 
 		 CCnt = Integer.parseInt(values[26]);
 		 CbCeCnt = Integer.parseInt(values[27]);
@@ -178,6 +181,10 @@ public class PathwayPuzzle {
 
 	public String getStructure() {
 		return structure;
+	}
+	
+	public String getPathwayName() {
+		return pathwayName;
 	}
 
 	public int getCCnt() {
