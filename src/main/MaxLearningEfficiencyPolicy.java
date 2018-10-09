@@ -21,7 +21,8 @@ public class MaxLearningEfficiencyPolicy {
 	private ArrayList<Float> secondChoicePred = new ArrayList<>();
 	private ArrayList<Float> thirdChoicePred = new ArrayList<>();
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
-	
+	private HashMap<Float, Integer> pred_cogLMap = new HashMap<>();
+
 	public MaxLearningEfficiencyPolicy(HashMap<String,Float> sortedAllPuzzle_PredMap, PathwayPuzzle lastPuzzle, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
 		this.lastPuzzle = lastPuzzle;
@@ -44,7 +45,6 @@ public class MaxLearningEfficiencyPolicy {
 
 		int numCogLClass;
 		int start;
-		String order;
 		
 		predToSuggest = new ArrayList<>();
 		secondChoicePred = new ArrayList<>();
@@ -61,9 +61,7 @@ public class MaxLearningEfficiencyPolicy {
 				start = -4;
 			}
 			numCogLClass = 5 - start + 1;
-			HashMap<Float, Integer> pred_cogLMap = predictCognitiveLoadFromPredictions(uniquePred, start, numCogLClass, "ascending");
-			getPreferredPredictions(pred_cogLMap);
-
+			pred_cogLMap = predictCognitiveLoadFromPredictions(uniquePred, start, numCogLClass, "ascending");
 		}else {
 //			System.out.println();
 //			System.out.println("lastPuzzle: " + lastCogL + ", " + lastPred);
@@ -87,7 +85,6 @@ public class MaxLearningEfficiencyPolicy {
 			}
 			
 			// combine the two maps
-			HashMap<Float, Integer> pred_cogLMap = new HashMap<>();
 			for (Float pred: pred_cogLMap_greater.keySet()) {
 				pred_cogLMap.put(pred, pred_cogLMap_greater.get(pred));
 			}
@@ -97,23 +94,30 @@ public class MaxLearningEfficiencyPolicy {
 			if (existsLastPredInPuzPredMap()) {
 				pred_cogLMap.put(lastPred, lastCogL);
 			}
-			
-			getPreferredPredictions(pred_cogLMap);
 		}
-		
+		getPreferredPredictions(pred_cogLMap);
+
 		return predToSuggest;
 	}
 	
-	public ArrayList<Float> getSecondChoice() {
+	public ArrayList<Float> getSecondChoicePred() {
 		return secondChoicePred;
 	}
 	
-	public ArrayList<Float> getThirdChoice() {
+	public ArrayList<Float> getThirdChoicePred() {
 		return thirdChoicePred;
 	}
 	
-	public ArrayList<Float> getUndesiredChoice() {
+	public ArrayList<Float> getUndesiredChoicePred() {
 		return undesiredChoicePred;
+	}
+	
+	public HashMap<Float,Integer> getExpectedCogLs(ArrayList<Float> predList) {
+		HashMap<Float, Integer> suggestedPred_cogLMap = new HashMap<>();
+		for (Float pred : predList) {
+			suggestedPred_cogLMap.put(pred, pred_cogLMap.get(pred));
+		}
+		return suggestedPred_cogLMap;
 	}
 	
 	private void getPreferredPredictions(HashMap<Float, Integer> pred_cogLMap) {
@@ -230,6 +234,9 @@ public class MaxLearningEfficiencyPolicy {
 					cogL++;
 					boundary = boundary + interval;
 				}
+				if (cogL > 5) {
+					cogL=5;
+				}
 				pred_cogLMap.put(pred, cogL);
 			}
 		}else {
@@ -240,6 +247,9 @@ public class MaxLearningEfficiencyPolicy {
 				if(values.get(i) < boundary) {
 					cogL--;
 					boundary = boundary - interval;
+				}
+				if (cogL < -4) {
+					cogL = -4;
 				}
 				pred_cogLMap.put(values.get(i), cogL);
 			}

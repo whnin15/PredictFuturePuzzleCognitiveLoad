@@ -124,7 +124,7 @@ public class PuzzlePredictionsMain {
 		
 		BufferedWriter writerPred = new BufferedWriter(new FileWriter(new File("src/main/data/allPuzPred.csv")));
 
-		writerPred.write("puzzle,model,cogLoad,predicted\n");
+		writerPred.write("user,puzzle,model,cogLoad,predicted\n");
 
 		for (File user: directory.listFiles()) {
 			ArrayList<String> completed = new ArrayList<String>();
@@ -147,7 +147,7 @@ public class PuzzlePredictionsMain {
 				
 				String puzzleNameToPredict = values[0];
 				PathwayPuzzle puzToPredict = predictionsReq.puzzleFeaturesMap.get(puzzleNameToPredict);
-				writerPred.write(values[0] + "," + values[1] + "," + values[2] + "," + values[3] + ",");
+				writerPred.write(userName + "," + values[0] + "," + values[1] + "," + values[2] + "," + values[3] + ",");
 				
 				HashMap<String, Float> puzzle_prediction_map = new HashMap<>();
 				for (String puzzleName: predictionsReq.puzzleFeaturesMap.keySet()) {
@@ -182,16 +182,16 @@ public class PuzzlePredictionsMain {
 				if (prefPredSet.size() > 0) {
 					writerPred.write(",1stChoice");
 				}else {
-					prefPredSet = maxEfficiencyPolicy.getSecondChoice();
+					prefPredSet = maxEfficiencyPolicy.getSecondChoicePred();
 					if (prefPredSet.size() > 0) {
 						writerPred.write(",2ndChoice");
 					}
 					else {
-						prefPredSet = maxEfficiencyPolicy.getThirdChoice();
+						prefPredSet = maxEfficiencyPolicy.getThirdChoicePred();
 						if (prefPredSet.size() > 0) {
 							writerPred.write(",3rdChoice");
 						}else {
-							prefPredSet = maxEfficiencyPolicy.getUndesiredChoice();
+							prefPredSet = maxEfficiencyPolicy.getUndesiredChoicePred();
 							if (prefPredSet.size() > 0) {
 								writerPred.write(",undesired");
 							}else {
@@ -200,13 +200,14 @@ public class PuzzlePredictionsMain {
 						}
 					}
 				}
+				HashMap<Float, Integer> pred_cogL = maxEfficiencyPolicy.getExpectedCogLs(prefPredSet);
 				
 				int count = 0;
-				for (Float pred: prefPredSet) {
-					writerPred.write("," + pred);
-					count++;
+				for (Float pred: pred_cogL.keySet()) {
+					writerPred.write("," + pred + ", " + pred_cogL.get(pred));
+					count+=2;
 				}
-				while (count < 10) {
+				while (count < 17) {
 					writerPred.write( ",");
 					count++;
 				}
