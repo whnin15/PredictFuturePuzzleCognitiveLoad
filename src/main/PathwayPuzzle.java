@@ -47,7 +47,7 @@ package main;
 import java.util.ArrayList;
 
 /**
- * @author Evan Balzuweit
+ * @author Wint Hnin
  */
 public class PathwayPuzzle {
 

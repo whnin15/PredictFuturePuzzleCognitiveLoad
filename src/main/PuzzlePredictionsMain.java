@@ -116,9 +116,16 @@ public class PuzzlePredictionsMain {
 	
 	public static void main(String[] args) throws Exception {
 		PuzzlePredictionsMain predictionsReq  = new PuzzlePredictionsMain();
+		PathwayPuzzle lastPuzzle = null;
+		float lastPred = 0f;
+		int lastCogL = 0;
 		
 		File directory = new File("src/main/data/pathwaysByUsers");
 		
+		BufferedWriter writerPred = new BufferedWriter(new FileWriter(new File("src/main/data/allPuzPred.csv")));
+
+		writerPred.write("puzzle,model,cogLoad,predicted\n");
+
 		for (File user: directory.listFiles()) {
 			ArrayList<String> completed = new ArrayList<String>();
 
@@ -126,12 +133,11 @@ public class PuzzlePredictionsMain {
 			String userName = user.getName().substring(0,user.getName().length()-4 );
 
 			BufferedReader reader = new BufferedReader(new FileReader(new File(directory + "/" + user.getName())));
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File("src/main/data/nextPuzzlePredicted/" + user.getName())));
+//			BufferedWriter writer = new BufferedWriter(new FileWriter(new File("src/main/data/nextPuzzlePredicted/" + user.getName()))); 	// run python/combineFiles.py to get allPuzPred.csv from individual files
 
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				if (line.contains("puzzle")) {
-					writer.write("puzzle,model,cogLoad,predicted\n");
 					continue;
 				}
 				String[] values = line.split(",");
@@ -139,8 +145,9 @@ public class PuzzlePredictionsMain {
 				completed.add("sequential-d.lgp");
 				completed.add("sequential-g.lgp");
 				
-				String puzzleUserDid = values[0];
-				writer.write(values[0] + "," + values[1] + "," + values[2] + "," + values[3]);
+				String puzzleNameToPredict = values[0];
+				PathwayPuzzle puzToPredict = predictionsReq.puzzleFeaturesMap.get(puzzleNameToPredict);
+				writerPred.write(values[0] + "," + values[1] + "," + values[2] + "," + values[3] + ",");
 				
 				HashMap<String, Float> puzzle_prediction_map = new HashMap<>();
 				for (String puzzleName: predictionsReq.puzzleFeaturesMap.keySet()) {
@@ -148,18 +155,17 @@ public class PuzzlePredictionsMain {
 						continue;
 					}
 					PathwayPuzzle puz = predictionsReq.puzzleFeaturesMap.get(puzzleName);
-					PathwayPuzzle puzUserDid = predictionsReq.puzzleFeaturesMap.get(puzzleUserDid);
 
 					// we want to predict for all puzzles in the same pathway and compare with the puzzle user did
-					if (puz.getPathwayName().equals(puzUserDid.getPathwayName()) ) {
-						PathwayUser u = (predictionsReq.user_puzzle_historyMap.get(userName)).get(puzzleUserDid);
+					if (puz.getPathwayName().equals(puzToPredict.getPathwayName()) ) {
+						PathwayUser u = (predictionsReq.user_puzzle_historyMap.get(userName)).get(puzzleNameToPredict);
 						
 						float prediction = new PredictionCalculation().getPrediction(u, puz);
 						puzzle_prediction_map.put(puzzleName, prediction);
 					}
 				}
 				if (Integer.parseInt(values[2]) < 5) {
-					completed.add(puzzleUserDid);
+					completed.add(puzzleNameToPredict);
 				}
 				
 				HashMap<String, Float> sortedByValue = puzzle_prediction_map
@@ -169,14 +175,33 @@ public class PuzzlePredictionsMain {
 											.collect(
 													Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2,
 													LinkedHashMap::new));
-				for (String puzzle: sortedByValue.keySet()) {
-					writer.write("," + puzzle + "," + sortedByValue.get(puzzle));
+				
+				MaxLearningEfficiencyPolicy maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
+				ArrayList<Float> prefPredSet = maxEfficiencyPolicy.getSuitablePredictions();
+				
+				int count = 0;
+				for (Float pred: prefPredSet) {
+					writerPred.write("," + pred);
+					count++;
 				}
-
-				writer.write( "\n");
+				while (count < 10) {
+					writerPred.write( ",");
+					count++;
+				}
+				
+				for (String puzzle: sortedByValue.keySet()) {
+					writerPred.write("," + puzzle + "," + sortedByValue.get(puzzle));
+				}
+				writerPred.write( "\n");
+				
+				lastPuzzle = puzToPredict;
+				lastPred = Float.parseFloat( values[3] );
+				lastCogL = Integer.parseInt( values[2] );
 			}
 			reader.close();
-			writer.close();
+			break;
+			
 		}
+		writerPred.close();
 	}
 }

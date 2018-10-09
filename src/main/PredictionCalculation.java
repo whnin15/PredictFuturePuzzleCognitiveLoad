@@ -15,6 +15,9 @@ import models.TbObCee;
 import models.TbObTee;
 import models.TbOe;
 
+/**
+ * @author Wint Hnin
+ */
 public class PredictionCalculation {
 		public float getPrediction( PathwayUser user, PathwayPuzzle puzzle ) {
 			String structure = puzzle.getStructure();
