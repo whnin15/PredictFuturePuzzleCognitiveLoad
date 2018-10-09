@@ -16,6 +16,11 @@ public class MaxLearningEfficiencyPolicy {
 	private PathwayPuzzle lastPuzzle;
 	private float lastPred;
 	private int lastCogL;
+
+	private ArrayList<Float> predToSuggest = new ArrayList<>();
+	private ArrayList<Float> secondChoicePred = new ArrayList<>();
+	private ArrayList<Float> thirdChoicePred = new ArrayList<>();
+	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
 	
 	public MaxLearningEfficiencyPolicy(HashMap<String,Float> sortedAllPuzzle_PredMap, PathwayPuzzle lastPuzzle, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
@@ -25,7 +30,7 @@ public class MaxLearningEfficiencyPolicy {
 	}
 	
 	public ArrayList<String> choosePuzzleSet() {
-		ArrayList<Float> predToSuggest = getSuitablePredictions();
+		getSuitablePredictions();
 		ArrayList<String> puzzleSet = new ArrayList<String>();
 		for (String puzzleName : sortedAllPuzzle_PredMap.keySet()) {
 			if (predToSuggest.contains(sortedAllPuzzle_PredMap.get(puzzleName))) {
@@ -35,108 +40,134 @@ public class MaxLearningEfficiencyPolicy {
 		return puzzleSet;
 	}
 	
-	public ArrayList<Float>  getSuitablePredictions() {
+	public ArrayList<Float> getSuitablePredictions() {
 
 		int numCogLClass;
 		int start;
 		String order;
-		ArrayList<Float> predToSuggest = new ArrayList<>();
+		
+		predToSuggest = new ArrayList<>();
+		secondChoicePred = new ArrayList<>();
 		
 		if (lastPuzzle == null) {
-			System.out.println("lastPuzzle is null");
+//			System.out.println("lastPuzzle is null");
 			
 			// if last puzzle is null, this is the first puzzle after sequential. Use the predictions and compare with each other
 			ArrayList<Float> uniquePred = getUniquePredValues();
-			System.out.println("uniquePred: " + Arrays.toString(uniquePred.toArray()));
-			
+	
 			if (Collections.min(uniquePred) > lastPred) {
 				start = lastCogL;
 			} else {
 				start = -4;
 			}
 			numCogLClass = 5 - start + 1;
-
-			System.out.println("nullPuz:" + start + ", " + "ascending" + ", " + numCogLClass + ", " + Collections.max(uniquePred) + ", " + Collections.min(uniquePred));
-
 			HashMap<Float, Integer> pred_cogLMap = predictCognitiveLoadFromPredictions(uniquePred, start, numCogLClass, "ascending");
-			for (Float pred: pred_cogLMap.keySet()) {
-				System.out.println(pred + ": " + pred_cogLMap.get(pred) + ", ");
-			}
-			System.out.println();
-
-			predToSuggest = getPreferredPredictions(pred_cogLMap, predToSuggest);
+			getPreferredPredictions(pred_cogLMap);
 
 		}else {
-			System.out.println("lastPuzzle: " + lastCogL);
+//			System.out.println();
+//			System.out.println("lastPuzzle: " + lastCogL + ", " + lastPred);
+			
 			// if last puzzle is not null, use the last puzzle as guide to the possible cognitive loads
 			ArrayList<Float> uniquePredLessThan = getUniquePredValuesLessThanPrevCogL();
 			ArrayList<Float> uniquePredGreaterThan = getUniquePredValuesGreaterThanPrevCogL();
 			
-			System.out.println("uniquePredLessThan: " + Arrays.toString(uniquePredLessThan.toArray()));
-			System.out.println("uniquePredGreaterThan: " + Arrays.toString(uniquePredGreaterThan.toArray()));	
-			
-			if (uniquePredGreaterThan.size() > 0 && lastCogL <= 1) {
+			HashMap<Float, Integer> pred_cogLMap_greater = new HashMap<>();
+			HashMap<Float, Integer> pred_cogLMap_lessThan = new HashMap<>();
+			if (uniquePredGreaterThan.size() > 0) {
 				start = lastCogL+1;
 				numCogLClass = 5 - start + 1;
-
-				System.out.println("greater than:" + start + ", " + "ascending" + ", " + numCogLClass + ", " + Collections.max(uniquePredGreaterThan) + ", " + Collections.min(uniquePredGreaterThan));
-				HashMap<Float, Integer> pred_cogLMap_greater = predictCognitiveLoadFromPredictions(uniquePredGreaterThan, start, numCogLClass, "ascending");
-				predToSuggest = getPreferredPredictions(pred_cogLMap_greater, predToSuggest);
-				
-				for (Float pred: pred_cogLMap_greater.keySet()) {
-					System.out.println(pred + ": " + pred_cogLMap_greater.get(pred) + ", ");
-				}
-				System.out.println();
+				pred_cogLMap_greater = predictCognitiveLoadFromPredictions(uniquePredGreaterThan, start, numCogLClass, "ascending");
 			}
-			if (uniquePredLessThan.size() > 0 && lastCogL >= -1) {
-				start = lastCogL -1;
-				numCogLClass = lastCogL - (-4) + 1;
 
-				System.out.println("less than:" + start + ", " + "descending" + ", " + numCogLClass + ", " + Collections.max(uniquePredLessThan) + ", " + Collections.min(uniquePredLessThan));
-				HashMap<Float, Integer> pred_cogLMap_lessThan = predictCognitiveLoadFromPredictions(uniquePredLessThan,  start, numCogLClass, "descending");
-				predToSuggest = getPreferredPredictions(pred_cogLMap_lessThan, predToSuggest);
-				
-				for (Float pred: pred_cogLMap_lessThan.keySet()) {
-					System.out.println(pred + ": " + pred_cogLMap_lessThan.get(pred) + ", ");
-				}
-				System.out.println();
+			if (uniquePredLessThan.size() > 0) {
+				start = lastCogL -1;
+				numCogLClass = start - (-4) + 1;
+				pred_cogLMap_lessThan = predictCognitiveLoadFromPredictions(uniquePredLessThan,  start, numCogLClass, "descending");
 			}
 			
-			// if last prediction is also included, we expect to have same cogL. So, include only if the cognitive load for that prediction is between -1 and 1.
-			for (String puzzle : this.sortedAllPuzzle_PredMap.keySet()) {
-				if ( (this.sortedAllPuzzle_PredMap.get(puzzle) == lastPred) && (lastCogL >= -1 && lastCogL <= 1) ) {
-					predToSuggest.add(lastPred);
-				}
+			// combine the two maps
+			HashMap<Float, Integer> pred_cogLMap = new HashMap<>();
+			for (Float pred: pred_cogLMap_greater.keySet()) {
+				pred_cogLMap.put(pred, pred_cogLMap_greater.get(pred));
 			}
+			for (Float pred: pred_cogLMap_lessThan.keySet()) {
+				pred_cogLMap.put(pred, pred_cogLMap_lessThan.get(pred));
+			}
+			if (existsLastPredInPuzPredMap()) {
+				pred_cogLMap.put(lastPred, lastCogL);
+			}
+			
+			getPreferredPredictions(pred_cogLMap);
 		}
-System.out.println(Arrays.toString(predToSuggest.toArray()));
+		
 		return predToSuggest;
 	}
 	
-	private ArrayList<Float> getPreferredPredictions(HashMap<Float, Integer> pred_cogLMap, ArrayList<Float> predToSuggest) {
+	public ArrayList<Float> getSecondChoice() {
+		return secondChoicePred;
+	}
+	
+	public ArrayList<Float> getThirdChoice() {
+		return thirdChoicePred;
+	}
+	
+	public ArrayList<Float> getUndesiredChoice() {
+		return undesiredChoicePred;
+	}
+	
+	private void getPreferredPredictions(HashMap<Float, Integer> pred_cogLMap) {
 		if (lastCogL < -1) {
 			// we want to increase by 2
+			int cognitiveLoadWanted = lastCogL +2;
 			for (Float pred: pred_cogLMap.keySet()) {
-				if (pred_cogLMap.get(pred) == (lastCogL + 2) ) {
+				int expectedCogLForPred = pred_cogLMap.get(pred);
+				if (expectedCogLForPred == cognitiveLoadWanted ) {
 					predToSuggest.add(pred);
+				} else if ( (expectedCogLForPred == (cognitiveLoadWanted -1)) || (expectedCogLForPred == (cognitiveLoadWanted + 1)) ) {
+					secondChoicePred.add(pred);
+				} else if ((expectedCogLForPred >= lastCogL) && expectedCogLForPred < 2) {
+					thirdChoicePred.add(pred);
+				}else {
+					undesiredChoicePred.add(pred);
 				}
 			}
 		} else if (lastCogL > 1) {
 			// we want to give next puzzle < 0
 			for (Float pred: pred_cogLMap.keySet()) {
-				if (pred_cogLMap.get(pred) < 0) {
+				int expectedCogLForPred = pred_cogLMap.get(pred);
+				if (expectedCogLForPred < 0) {
 					predToSuggest.add(pred);
+				} else if ( expectedCogLForPred <= 1 ) {
+					secondChoicePred.add(pred);
+				} else if (expectedCogLForPred <= lastCogL) {
+					thirdChoicePred.add(pred);
+				}else {
+					undesiredChoicePred.add(pred);
 				}
 			}
 		}else {
 			// give puzzles between -1 and 1
 			for (Float pred: pred_cogLMap.keySet()) {
-				if (pred_cogLMap.get(pred) >= -1 && (pred_cogLMap.get(pred) <= 1)) {
+				int expectedCogLForPred = pred_cogLMap.get(pred);
+				if ( (expectedCogLForPred >= -1) && (expectedCogLForPred <= 1)) {
 					predToSuggest.add(pred);
+				} else if (expectedCogLForPred == -2) {
+					secondChoicePred.add(pred);
+				} else {
+					undesiredChoicePred.add(pred);
 				}
 			}
 		}
-		return predToSuggest;
+	}
+
+	private boolean existsLastPredInPuzPredMap() {
+		for (String puzzle : this.sortedAllPuzzle_PredMap.keySet()) {
+			if ( (this.sortedAllPuzzle_PredMap.get(puzzle) == lastPred) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private ArrayList<Float> getUniquePredValues() {
@@ -175,7 +206,7 @@ System.out.println(Arrays.toString(predToSuggest.toArray()));
 	private HashMap<Float, Integer> predictCognitiveLoadFromPredictions(ArrayList<Float> values, int startCogL, int numCogLClass, String order) {
 		float interval;
 		HashMap<Float, Integer> pred_CogLMap;
-		if (values.size() > numCogLClass) {
+		if (values.size() < numCogLClass) {
 			interval = 0;
 		}
 		else {
@@ -188,13 +219,14 @@ System.out.println(Arrays.toString(predToSuggest.toArray()));
 	
 	private HashMap<Float, Integer> getCogLFromPred( ArrayList<Float> values, float interval, int startCogL, int numCogLClass, String order) {
 //		System.out.println(startCogL + ", " + interval + ", " + order + ", " + numCogLClass + ", " + Collections.max(values) + ", " + Collections.min(values));
+		
 		HashMap<Float, Integer> pred_cogLMap = new HashMap<>();
 		if (order.equals("ascending")) {
 			float boundary = values.get(0) + interval;	//to see when the cognitive load should be increased
 			int cogL = startCogL;
 			
 			for (Float pred : values) {
-				if (pred >= boundary) {
+				if (pred > boundary) {
 					cogL++;
 					boundary = boundary + interval;
 				}
@@ -205,7 +237,7 @@ System.out.println(Arrays.toString(predToSuggest.toArray()));
 			int cogL = startCogL;
 			
 			for (int i = values.size()-1; i >=0; i--) {
-				if(values.get(i) <= boundary) {
+				if(values.get(i) < boundary) {
 					cogL--;
 					boundary = boundary - interval;
 				}

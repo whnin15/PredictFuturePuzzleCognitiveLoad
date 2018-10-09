@@ -179,6 +179,28 @@ public class PuzzlePredictionsMain {
 				MaxLearningEfficiencyPolicy maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
 				ArrayList<Float> prefPredSet = maxEfficiencyPolicy.getSuitablePredictions();
 				
+				if (prefPredSet.size() > 0) {
+					writerPred.write(",1stChoice");
+				}else {
+					prefPredSet = maxEfficiencyPolicy.getSecondChoice();
+					if (prefPredSet.size() > 0) {
+						writerPred.write(",2ndChoice");
+					}
+					else {
+						prefPredSet = maxEfficiencyPolicy.getThirdChoice();
+						if (prefPredSet.size() > 0) {
+							writerPred.write(",3rdChoice");
+						}else {
+							prefPredSet = maxEfficiencyPolicy.getUndesiredChoice();
+							if (prefPredSet.size() > 0) {
+								writerPred.write(",undesired");
+							}else {
+								writerPred.write(",");
+							}
+						}
+					}
+				}
+				
 				int count = 0;
 				for (Float pred: prefPredSet) {
 					writerPred.write("," + pred);
@@ -198,9 +220,7 @@ public class PuzzlePredictionsMain {
 				lastPred = Float.parseFloat( values[3] );
 				lastCogL = Integer.parseInt( values[2] );
 			}
-			reader.close();
-			break;
-			
+			reader.close();			
 		}
 		writerPred.close();
 	}
