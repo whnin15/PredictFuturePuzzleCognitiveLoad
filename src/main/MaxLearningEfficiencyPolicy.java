@@ -160,9 +160,7 @@ public class MaxLearningEfficiencyPolicy {
 					predToSuggest.add(pred);
 				} else if ( expectedCogLForPred <= 1 ) {
 					secondChoicePred.add(pred);
-				} else if (expectedCogLForPred <= lastCogL) {
-					thirdChoicePred.add(pred);
-				}else {
+				} else {
 					float min = Collections.min( pred_cogLMap.keySet() );
 					undesiredChoicePred.add(min);
 					break;
