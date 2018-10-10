@@ -124,6 +124,10 @@ public class MaxLearningEfficiencyPolicy {
 		if (lastCogL < -1) {
 			// we want to increase by 2
 			int cognitiveLoadWanted = lastCogL +2;
+			int bestload = -5;
+			float bestload_pred = 100.0f;
+			boolean addToUndesired = false;
+
 			for (Float pred: pred_cogLMap.keySet()) {
 				int expectedCogLForPred = pred_cogLMap.get(pred);
 				if (expectedCogLForPred == cognitiveLoadWanted ) {
@@ -133,9 +137,21 @@ public class MaxLearningEfficiencyPolicy {
 				} else if ((expectedCogLForPred >= lastCogL) && expectedCogLForPred < 2) {
 					thirdChoicePred.add(pred);
 				}else {
-					undesiredChoicePred.add(pred);
+					//choose the closest one. choose in the order of 2, -3, -4, 3, 4, 5. It will be better to work 2 (a bit hard) than very easy after easy puzzle.
+					if (bestload < expectedCogLForPred && expectedCogLForPred < 3) {
+						bestload = expectedCogLForPred;
+						bestload_pred = pred;
+					}else if (bestload == -5 && expectedCogLForPred >= 3) {
+						bestload_pred = pred;
+					}
+					addToUndesired = true;
 				}
+			}		
+			
+			if (addToUndesired) {
+				undesiredChoicePred.add(bestload_pred);
 			}
+			
 		} else if (lastCogL > 1) {
 			// we want to give next puzzle < 0
 			for (Float pred: pred_cogLMap.keySet()) {
@@ -147,10 +163,17 @@ public class MaxLearningEfficiencyPolicy {
 				} else if (expectedCogLForPred <= lastCogL) {
 					thirdChoicePred.add(pred);
 				}else {
-					undesiredChoicePred.add(pred);
+					float min = Collections.min( pred_cogLMap.values() );
+					undesiredChoicePred.add(min);
+					break;
 				}
 			}
+			
 		}else {
+			int bestload = -5;
+			float bestload_pred = 100.0f;
+			boolean addToUndesired = false;
+
 			// give puzzles between -1 and 1
 			for (Float pred: pred_cogLMap.keySet()) {
 				int expectedCogLForPred = pred_cogLMap.get(pred);
@@ -158,10 +181,23 @@ public class MaxLearningEfficiencyPolicy {
 					predToSuggest.add(pred);
 				} else if (expectedCogLForPred == -2) {
 					secondChoicePred.add(pred);
+				} else if (expectedCogLForPred == 2) {
+					thirdChoicePred.add(pred);
 				} else {
-					undesiredChoicePred.add(pred);
-				}
+					//choose the closest one. choose in the order of -3, -4, 3, 4, 5.
+					if (bestload < expectedCogLForPred && expectedCogLForPred < 3) {
+						bestload = expectedCogLForPred;
+						bestload_pred = pred;
+					}else if (bestload == -5 && expectedCogLForPred >= 3) {
+						bestload_pred = pred;
+					}
+					addToUndesired = true;				}
 			}
+
+			if (addToUndesired) {
+				undesiredChoicePred.add(bestload_pred);
+			}
+			
 		}
 	}
 
