@@ -116,9 +116,6 @@ public class PuzzlePredictionsMain {
 	
 	public static void main(String[] args) throws Exception {
 		PuzzlePredictionsMain predictionsReq  = new PuzzlePredictionsMain();
-		PathwayPuzzle lastPuzzle = null;
-		float lastPred = 0f;
-		int lastCogL = 0;
 		
 		File directory = new File("src/main/data/pathwaysByUsers");
 		
@@ -128,6 +125,9 @@ public class PuzzlePredictionsMain {
 
 		for (File user: directory.listFiles()) {
 			ArrayList<String> completed = new ArrayList<String>();
+			PathwayPuzzle lastPuzzle = null;
+			float lastPred = 0f;
+			int lastCogL = 0;
 
 			System.out.println(user.getName().substring(0,user.getName().length()-4 ) );
 			String userName = user.getName().substring(0,user.getName().length()-4 );
