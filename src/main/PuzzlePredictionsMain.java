@@ -176,7 +176,8 @@ public class PuzzlePredictionsMain {
 													Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2,
 													LinkedHashMap::new));
 				
-				MaxLearningEfficiencyPolicy maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
+//				MaxLearningEfficiencyPolicy maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
+				BaselineMaxLEPolicy maxEfficiencyPolicy = new BaselineMaxLEPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
 				ArrayList<Float> prefPredSet = maxEfficiencyPolicy.getSuitablePredictions();
 				
 				if (prefPredSet.size() > 0) {
@@ -200,14 +201,14 @@ public class PuzzlePredictionsMain {
 						}
 					}
 				}
-				HashMap<Float, Integer> pred_cogL = maxEfficiencyPolicy.getExpectedCogLs(prefPredSet);
+//				HashMap<Float, Integer> pred_cogL = maxEfficiencyPolicy.getExpectedCogLs(prefPredSet);
 				
 				int count = 0;
-				for (Float pred: pred_cogL.keySet()) {
-					writerPred.write("," + pred + ", " + pred_cogL.get(pred));
-					count+=2;
+				for (Float pred: prefPredSet) {
+					writerPred.write("," + pred );
+					count+=1;
 				}
-				while (count < 17) {
+				while (count < 9) {
 					writerPred.write( ",");
 					count++;
 				}
