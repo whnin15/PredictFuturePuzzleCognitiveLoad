@@ -79,6 +79,10 @@ public class PathwayPuzzle {
 	 private int TbObTeeCnt;
 	 private int TbOeCnt;
 
+	 public PathwayPuzzle() {
+		 
+	 }
+	 
 	public PathwayPuzzle(String line) {
 		String[] values = line.split(",");
 		

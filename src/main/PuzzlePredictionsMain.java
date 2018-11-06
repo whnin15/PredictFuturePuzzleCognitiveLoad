@@ -124,6 +124,9 @@ public class PuzzlePredictionsMain {
 		writerPred.write("user,puzzle,model,cogLoad,predicted\n");
 
 		for (File user: directory.listFiles()) {
+			if (user.getName().startsWith(".")) {
+				continue;
+			}
 			ArrayList<String> completed = new ArrayList<String>();
 			PathwayPuzzle lastPuzzle = null;
 			float lastPred = 0f;
@@ -175,9 +178,13 @@ public class PuzzlePredictionsMain {
 											.collect(
 													Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2,
 													LinkedHashMap::new));
-				
-//				MaxLearningEfficiencyPolicy maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
-				BaselineMaxLEPolicy maxEfficiencyPolicy = new BaselineMaxLEPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
+				Policy maxEfficiencyPolicy;
+				if (args[0].equals("baseline_pred")) {
+					maxEfficiencyPolicy = new BaselinePolicy_pred(sortedByValue, lastPuzzle, lastPred, lastCogL);
+				}else {
+					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
+				}
+
 				ArrayList<Float> prefPredSet = maxEfficiencyPolicy.getSuitablePredictions();
 				
 				if (prefPredSet.size() > 0) {

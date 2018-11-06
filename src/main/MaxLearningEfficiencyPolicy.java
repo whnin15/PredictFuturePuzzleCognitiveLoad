@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * @author Wint Hnin
  */
-public class MaxLearningEfficiencyPolicy {
+public class MaxLearningEfficiencyPolicy implements Policy{
 	
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
 	private PathwayPuzzle lastPuzzle;
