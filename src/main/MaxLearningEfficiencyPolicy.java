@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 public class MaxLearningEfficiencyPolicy implements Policy{
 	
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
-	private PathwayPuzzle lastPuzzle;
 	private float lastPred;
 	private int lastCogL;
 
@@ -23,9 +22,8 @@ public class MaxLearningEfficiencyPolicy implements Policy{
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
 	private HashMap<Float, Integer> pred_cogLMap = new HashMap<>();
 
-	public MaxLearningEfficiencyPolicy(HashMap<String,Float> sortedAllPuzzle_PredMap, PathwayPuzzle lastPuzzle, float lastPred, int lastCogL) {
+	public MaxLearningEfficiencyPolicy(HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
-		this.lastPuzzle = lastPuzzle;
 		this.lastPred = lastPred;
 		this.lastCogL = lastCogL;
 	}
@@ -49,7 +47,7 @@ public class MaxLearningEfficiencyPolicy implements Policy{
 		predToSuggest = new ArrayList<>();
 		secondChoicePred = new ArrayList<>();
 		
-		if (lastPuzzle == null) {
+		if (lastCogL == -10) {
 //			System.out.println("lastPuzzle is null");
 			
 			// if last puzzle is null, this is the first puzzle after sequential. Use the predictions and compare with each other
@@ -95,7 +93,7 @@ public class MaxLearningEfficiencyPolicy implements Policy{
 				pred_cogLMap.put(lastPred, lastCogL);
 			}
 		}
-		getPreferredPredictions(pred_cogLMap);
+		assignPredictionLevel(pred_cogLMap);
 
 		return predToSuggest;
 	}
@@ -120,7 +118,7 @@ public class MaxLearningEfficiencyPolicy implements Policy{
 		return suggestedPred_cogLMap;
 	}
 	
-	private void getPreferredPredictions(HashMap<Float, Integer> pred_cogLMap) {
+	private void assignPredictionLevel(HashMap<Float, Integer> pred_cogLMap) {
 		if (lastCogL < -1) {
 			// we want to increase by 2
 			int cognitiveLoadWanted = lastCogL +2;

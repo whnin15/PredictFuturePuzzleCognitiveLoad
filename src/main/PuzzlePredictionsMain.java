@@ -119,7 +119,7 @@ public class PuzzlePredictionsMain {
 		
 		File directory = new File("src/main/data/pathwaysByUsers");
 		
-		BufferedWriter writerPred = new BufferedWriter(new FileWriter(new File("src/main/data/allPuzPred.csv")));
+		BufferedWriter writerPred = new BufferedWriter(new FileWriter(new File("src/main/data/" + args[0] + ".xlsx")));
 
 		writerPred.write("user,puzzle,model,cogLoad,predicted\n");
 
@@ -128,9 +128,8 @@ public class PuzzlePredictionsMain {
 				continue;
 			}
 			ArrayList<String> completed = new ArrayList<String>();
-			PathwayPuzzle lastPuzzle = null;
-			float lastPred = 0f;
-			int lastCogL = 0;
+			float lastPred = -10f;
+			int lastCogL = -10;
 
 			System.out.println(user.getName().substring(0,user.getName().length()-4 ) );
 			String userName = user.getName().substring(0,user.getName().length()-4 );
@@ -180,9 +179,11 @@ public class PuzzlePredictionsMain {
 													LinkedHashMap::new));
 				Policy maxEfficiencyPolicy;
 				if (args[0].equals("baseline_pred")) {
-					maxEfficiencyPolicy = new BaselinePolicy_pred(sortedByValue, lastPuzzle, lastPred, lastCogL);
+					maxEfficiencyPolicy = new Baseline_maxLE_pred(sortedByValue, lastPred, lastCogL);
+				}else if (args[0].equals("baseline_auc")){
+					maxEfficiencyPolicy = new Baseline_maxLE_auc(sortedByValue, lastPred, lastCogL);
 				}else {
-					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPuzzle, lastPred, lastCogL);
+					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPred, lastCogL);
 				}
 
 				ArrayList<Float> prefPredSet = maxEfficiencyPolicy.getSuitablePredictions();
@@ -225,7 +226,6 @@ public class PuzzlePredictionsMain {
 				}
 				writerPred.write( "\n");
 				
-				lastPuzzle = puzToPredict;
 				lastPred = Float.parseFloat( values[3] );
 				lastCogL = Integer.parseInt( values[2] );
 			}

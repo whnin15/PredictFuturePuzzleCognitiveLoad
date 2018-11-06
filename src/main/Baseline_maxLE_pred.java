@@ -10,10 +10,9 @@ import java.util.stream.Collectors;
 /**
  * @author Wint Hnin
  */
-public class BaselinePolicy_pred implements Policy{
+public class Baseline_maxLE_pred implements Policy{
 	
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
-	private PathwayPuzzle lastPuzzle;
 	private float lastPred;
 	private int lastCogL;
 
@@ -23,9 +22,8 @@ public class BaselinePolicy_pred implements Policy{
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
 	private HashMap<Float, Integer> pred_cogLMap = new HashMap<>();
 
-	public BaselinePolicy_pred(HashMap<String,Float> sortedAllPuzzle_PredMap, PathwayPuzzle lastPuzzle, float lastPred, int lastCogL) {
+	public Baseline_maxLE_pred(HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
-		this.lastPuzzle = lastPuzzle;
 		this.lastPred = lastPred;
 		this.lastCogL = lastCogL;
 	}
@@ -61,15 +59,23 @@ public class BaselinePolicy_pred implements Policy{
 	}
 	
 	public void assignPredictionLevel(float prediction) {
-		// give -1 and 1 all the time or as close to that as possible
-		if (Math.round(prediction) >= -1 && Math.round(prediction) <= 1) {
-			addToArray(predToSuggest, prediction);
-		}else if (Math.round(prediction) == -2 || Math.round(prediction) == 2) {
-			addToArray(secondChoicePred, prediction);
-		}else if (Math.round(prediction) < -2) {
-			addToArray(thirdChoicePred, prediction);
+		// give -1 and 1 all the time or as close to that as possible, or if the lastCogL > 1, give < 0.
+		if (lastCogL > 1) {
+			if (Math.round(prediction) < 0) {
+				addToArray(predToSuggest, prediction);
+			}else {
+				addToArray(undesiredChoicePred, prediction);
+			}
 		}else {
-			addToArray(undesiredChoicePred, prediction);
+			if (Math.round(prediction) >= -1 && Math.round(prediction) <= 1) {
+				addToArray(predToSuggest, prediction);
+			}else if (Math.round(prediction) == -2 || Math.round(prediction) == 2) {
+				addToArray(secondChoicePred, prediction);
+			}else if (Math.round(prediction) < -2) {
+				addToArray(thirdChoicePred, prediction);
+			}else {
+				addToArray(undesiredChoicePred, prediction);
+			}
 		}
 	}
 	
