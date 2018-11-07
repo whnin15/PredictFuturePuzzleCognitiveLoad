@@ -131,6 +131,8 @@ public class PuzzlePredictionsMain {
 			String lastModel = "";
 			float lastPred = -10f;
 			int lastCogL = -10;
+			float last_lastPred = -10f;
+			int last_lastCogL = -10;
 
 			System.out.println(user.getName().substring(0,user.getName().length()-4 ) );
 			String userName = user.getName().substring(0,user.getName().length()-4 );
@@ -187,10 +189,28 @@ public class PuzzlePredictionsMain {
 					maxEfficiencyPolicy = new MaxLE_Baseline_auc(sortedByValue, lastPred, lastCogL);
 				} else if (args[0].equals("modelCompare_sameOrNew")){
 					maxEfficiencyPolicy = new MaxLE_ModelComp_sameOrNew_auc(sortedByValue, lastPred, lastCogL, lastModel, puzzle_model_map);
+				} else if (args[0].equals("modelCompare_linearEq")){
+					maxEfficiencyPolicy = new MaxLE_ModelComp_linearEq_auc(sortedByValue, lastPred, lastCogL, lastModel, puzzle_model_map);
+				} else if (args[0].equals("noise_sameOrNew")){
+					boolean isNoise = false;
+					if (last_lastCogL != -10){
+						if( ((last_lastCogL - lastCogL) * (last_lastPred - lastPred)) < 0) {
+							isNoise = true;
+						}
+					}
+					maxEfficiencyPolicy = new MaxLE_Noise_sameOrNew_auc(sortedByValue, lastPred, lastCogL, isNoise);
+				} else if (args[0].equals("noise_linearEq")){
+					boolean isNoise = false;
+					if (last_lastCogL != -10){
+						if( ((last_lastCogL - lastCogL) * (last_lastPred - lastPred)) < 0) {
+							isNoise = true;
+						}
+					}
+					maxEfficiencyPolicy = new MaxLE_Noise_linearEq_auc(sortedByValue, lastPred, lastCogL, puzzle_model_map, isNoise);
 				} else {
 					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPred, lastCogL);
 				}
-
+				
 				ArrayList<Float> prefPredSet = maxEfficiencyPolicy.getSuitablePredictions();
 				
 				if (prefPredSet.size() > 0) {
@@ -232,6 +252,8 @@ public class PuzzlePredictionsMain {
 				writerPred.write( "\n");
 				
 				lastModel = values[1];
+				last_lastPred = lastPred;
+				last_lastCogL = lastCogL;
 				lastPred = Float.parseFloat( values[3] );
 				lastCogL = Integer.parseInt( values[2] );
 			}
