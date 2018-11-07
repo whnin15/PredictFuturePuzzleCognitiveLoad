@@ -15,17 +15,21 @@ public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
 	private float lastPred = 0.0f;
 	private int lastCogL = 0;
+	private String lastModel = "";
+	HashMap<String, String> puzzle_model_map;
 
 	private ArrayList<Float> predToSuggest = new ArrayList<>();
 	private ArrayList<Float> secondChoicePred = new ArrayList<>();
 	private ArrayList<Float> thirdChoicePred = new ArrayList<>();
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
-	private HashMap<Integer, Float> level_predMap = new HashMap<>();
+	private HashMap<Float,Integer> pred_levelMap = new HashMap<>();
 
-	public MaxLE_ModelComp_sameOrNew_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
+	public MaxLE_ModelComp_sameOrNew_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL, String lastModel, HashMap<String, String> puzzle_model_map) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
 		this.lastPred = lastPred;
 		this.lastCogL = lastCogL;
+		this.lastModel = lastModel;
+		this.puzzle_model_map = puzzle_model_map;
 	}
 	
 	public ArrayList<String> choosePuzzleSet() {
@@ -44,8 +48,13 @@ public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 		getUniquePredValuesLessThanPrevCogL();
 		getUniquePredValuesGreaterThanPrevCogL();
 		
-		for (Integer level : level_predMap.keySet()) {
-			assignPredictionLevel(level, level_predMap.get(level));
+		for (String puzzleName : sortedAllPuzzle_PredMap.keySet()) {
+			boolean isSameModel = false;
+			if (puzzle_model_map.get(puzzleName).equals(lastModel)) {
+				isSameModel = true;
+			}
+			float prediction = sortedAllPuzzle_PredMap.get(puzzleName);
+			assignPredictionLevel(prediction, pred_levelMap.get(prediction), puzzleName, isSameModel);
 		}
 		return predToSuggest;
 	}
@@ -62,24 +71,44 @@ public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 		return undesiredChoicePred;
 	}
 	
-	private void assignPredictionLevel(int level, float pred) {
-		// give -1 and 1 all the time or as close to that as possible, or if the lastCogL > 1, give < 0.
-		if (lastCogL > 1) {
-			int targetLevel = -1 - lastCogL;
-			if (level <= targetLevel) {
-				addToArray(predToSuggest, pred);
+	private void assignPredictionLevel(float pred, int level, String puzzleName, boolean isSameModel) {
+		if (isSameModel) {
+			// give -1 and 1 all the time or as close to that as possible, or if the lastCogL > 1, give < 0.
+			if (lastCogL > 1) {
+				int targetLevel = -1 - lastCogL;
+				if (level <= targetLevel) {
+					addToArray(predToSuggest, pred);
+				}else {
+					addToArray(undesiredChoicePred, pred);
+				}
 			}else {
-				addToArray(undesiredChoicePred, pred);
+				if (level >= (-1-lastCogL) && level <= (1-lastCogL) ) {
+					addToArray(predToSuggest, pred );
+				} else if (level == (-2-lastCogL) || level == (2-lastCogL) ) {
+					addToArray(secondChoicePred, pred );
+				} else if (level < (-2-lastCogL) ) {
+					addToArray(thirdChoicePred, pred );
+				} else {
+					addToArray(undesiredChoicePred, pred );
+				}
 			}
 		}else {
-			if (level >= (-1-lastCogL) && level <= (1-lastCogL) ) {
-				addToArray(predToSuggest, pred );
-			} else if (level == (-2-lastCogL) || level == (2-lastCogL) ) {
-				addToArray(secondChoicePred, pred );
-			} else if (level < (-2-lastCogL) ) {
-				addToArray(thirdChoicePred, pred );
-			} else {
-				addToArray(undesiredChoicePred, pred );
+			if (lastCogL > 1) {
+				if (pred < 0) {
+					addToArray(predToSuggest, pred);
+				}else {
+					addToArray(undesiredChoicePred, pred);
+				}
+			}else {
+				if (pred >= -1 && pred <= 1) {
+					addToArray(predToSuggest, pred);
+				}else if (pred >= -2 && pred <= 2) {
+					addToArray(secondChoicePred, pred);
+				}else if (pred < -2) {
+					addToArray(thirdChoicePred, pred);
+				}else {
+					addToArray(undesiredChoicePred, pred);
+				}
 			}
 		}
 	}
@@ -123,7 +152,7 @@ public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 	private void assignCogLLevels(ArrayList<Float> predictions, String direction) {
 		if (direction.equals("same") ) {
 			for (Float pred : predictions) {
-				level_predMap.put(0, pred);
+				pred_levelMap.put(pred, 0);
 			}
 		}else if (direction.equals("greater")) {
 			Collections.sort(predictions);	// sort by ascending order
@@ -133,7 +162,7 @@ public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 				if (lastLevel_pred != pred) {
 					level += 1;
 				}
-				level_predMap.put(level, pred);
+				pred_levelMap.put(pred, level);
 				lastLevel_pred = pred;
 				
 			}
@@ -145,7 +174,7 @@ public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 				if (lastLevel_pred != pred) {
 					level -= 1;
 				}
-				level_predMap.put(level, pred);
+				pred_levelMap.put(pred, level);
 				lastLevel_pred = pred;
 			}
 		}

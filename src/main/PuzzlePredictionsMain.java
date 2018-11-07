@@ -153,6 +153,7 @@ public class PuzzlePredictionsMain {
 				writerPred.write(userName + "," + values[0] + "," + values[1] + "," + values[2] + "," + values[3] + ",");
 				
 				HashMap<String, Float> puzzle_prediction_map = new HashMap<>();
+				HashMap<String, String> puzzle_model_map = new HashMap<>();
 				for (String puzzleName: predictionsReq.puzzleFeaturesMap.keySet()) {
 					if (completed.contains(puzzleName)) {
 						continue;
@@ -165,6 +166,7 @@ public class PuzzlePredictionsMain {
 						
 						float prediction = new PredictionCalculation().getPrediction(u, puz);
 						puzzle_prediction_map.put(puzzleName, prediction);
+						puzzle_model_map.put(puzzleName, puz.getStructure());
 					}
 				}
 				if (Integer.parseInt(values[2]) < 5) {
@@ -181,15 +183,11 @@ public class PuzzlePredictionsMain {
 				Policy maxEfficiencyPolicy;
 				if (args[0].equals("baseline_pred")) {
 					maxEfficiencyPolicy = new MaxLE_Baseline_pred(sortedByValue, lastPred, lastCogL);
-				}else if (args[0].equals("baseline_auc")){
+				} else if (args[0].equals("baseline_auc")){
 					maxEfficiencyPolicy = new MaxLE_Baseline_auc(sortedByValue, lastPred, lastCogL);
-				}else if (args[0].equals("modelCompare_sameOrNew")){
-					if (lastModel.equals(values[1])) {
-						maxEfficiencyPolicy = new MaxLE_ModelComp_sameOrNew_auc(sortedByValue, lastPred, lastCogL);
-					}else {
-						maxEfficiencyPolicy = new MaxLE_ModelComp_sameOrNew_auc(sortedByValue, 0.0f, 0);
-					}
-				}else {
+				} else if (args[0].equals("modelCompare_sameOrNew")){
+					maxEfficiencyPolicy = new MaxLE_ModelComp_sameOrNew_auc(sortedByValue, lastPred, lastCogL, lastModel, puzzle_model_map);
+				} else {
 					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPred, lastCogL);
 				}
 

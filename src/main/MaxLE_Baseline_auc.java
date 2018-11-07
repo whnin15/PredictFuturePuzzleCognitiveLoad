@@ -20,7 +20,7 @@ public class MaxLE_Baseline_auc implements Policy{
 	private ArrayList<Float> secondChoicePred = new ArrayList<>();
 	private ArrayList<Float> thirdChoicePred = new ArrayList<>();
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
-	private HashMap<Integer, Float> level_predMap = new HashMap<>();
+	private HashMap<Float, Integer> pred_levelMap = new HashMap<>();
 
 	public MaxLE_Baseline_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
@@ -29,9 +29,9 @@ public class MaxLE_Baseline_auc implements Policy{
 		
 		// first puzzle is noted by last cogL and pred by setting them as -10.
 		// in this policy, we want to use these last values as 0, and so we are setting them back here.
-		if (lastCogL == -10) {
-			lastPred = 0f;
-			lastCogL = 0;
+		if (this.lastCogL == -10) {
+			this.lastPred = 0f;
+			this.lastCogL = 0;
 		}
 	}
 	
@@ -51,11 +51,9 @@ public class MaxLE_Baseline_auc implements Policy{
 		getUniquePredValuesLessThanPrevCogL();
 		getUniquePredValuesGreaterThanPrevCogL();
 		
-		for (Integer level : level_predMap.keySet()) {
-			System.out.print(level + ": " + level_predMap.get(level) + ", ");
-			assignPredictionLevel(level, level_predMap.get(level));
+		for (Float pred : pred_levelMap.keySet()) {
+			assignPredictionLevel(pred_levelMap.get(pred), pred);
 		}
-		System.out.println();
 		return predToSuggest;
 	}
 	
@@ -83,7 +81,7 @@ public class MaxLE_Baseline_auc implements Policy{
 		}else {
 			if (level >= (-1-lastCogL) && level <= (1-lastCogL) ) {
 				addToArray(predToSuggest, pred );
-			} else if (level == (-2-lastCogL) || level == (2-lastCogL) ) {
+			} else if (level >= (-2-lastCogL) && level <= (2-lastCogL) ) {
 				addToArray(secondChoicePred, pred );
 			} else if (level < (-2-lastCogL) ) {
 				addToArray(thirdChoicePred, pred );
@@ -132,7 +130,7 @@ public class MaxLE_Baseline_auc implements Policy{
 	private void assignCogLLevels(ArrayList<Float> predictions, String direction) {
 		if (direction.equals("same") ) {
 			for (Float pred : predictions) {
-				level_predMap.put(0, pred);
+				pred_levelMap.put(pred, 0);
 			}
 		}else if (direction.equals("greater")) {
 			Collections.sort(predictions);	// sort by ascending order
@@ -142,7 +140,7 @@ public class MaxLE_Baseline_auc implements Policy{
 				if (lastLevel_pred != pred) {
 					level += 1;
 				}
-				level_predMap.put(level, pred);
+				pred_levelMap.put(pred, level);
 				lastLevel_pred = pred;
 				
 			}
@@ -154,7 +152,7 @@ public class MaxLE_Baseline_auc implements Policy{
 				if (lastLevel_pred != pred) {
 					level -= 1;
 				}
-				level_predMap.put(level, pred);
+				pred_levelMap.put(pred, level);
 				lastLevel_pred = pred;
 			}
 		}
