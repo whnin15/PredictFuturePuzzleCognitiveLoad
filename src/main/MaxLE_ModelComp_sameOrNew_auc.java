@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * @author Wint Hnin
  */
-public class SameOrNewModel_maxLE_auc implements Policy{
+public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 	
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
 	private float lastPred = 0.0f;
@@ -22,7 +22,7 @@ public class SameOrNewModel_maxLE_auc implements Policy{
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
 	private HashMap<Integer, Float> level_predMap = new HashMap<>();
 
-	public SameOrNewModel_maxLE_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
+	public MaxLE_ModelComp_sameOrNew_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
 		this.lastPred = lastPred;
 		this.lastCogL = lastCogL;

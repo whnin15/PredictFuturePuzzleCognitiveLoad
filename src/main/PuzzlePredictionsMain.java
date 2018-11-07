@@ -119,7 +119,7 @@ public class PuzzlePredictionsMain {
 		
 		File directory = new File("src/main/data/pathwaysByUsers");
 		
-		BufferedWriter writerPred = new BufferedWriter(new FileWriter(new File("src/main/data/" + args[0] + ".xlsx")));
+		BufferedWriter writerPred = new BufferedWriter(new FileWriter(new File("src/main/data/" + args[0] + ".csv")));
 
 		writerPred.write("user,puzzle,model,cogLoad,predicted\n");
 
@@ -128,6 +128,7 @@ public class PuzzlePredictionsMain {
 				continue;
 			}
 			ArrayList<String> completed = new ArrayList<String>();
+			String lastModel = "";
 			float lastPred = -10f;
 			int lastCogL = -10;
 
@@ -179,9 +180,15 @@ public class PuzzlePredictionsMain {
 													LinkedHashMap::new));
 				Policy maxEfficiencyPolicy;
 				if (args[0].equals("baseline_pred")) {
-					maxEfficiencyPolicy = new Baseline_maxLE_pred(sortedByValue, lastPred, lastCogL);
+					maxEfficiencyPolicy = new MaxLE_Baseline_pred(sortedByValue, lastPred, lastCogL);
 				}else if (args[0].equals("baseline_auc")){
-					maxEfficiencyPolicy = new Baseline_maxLE_auc(sortedByValue, lastPred, lastCogL);
+					maxEfficiencyPolicy = new MaxLE_Baseline_auc(sortedByValue, lastPred, lastCogL);
+				}else if (args[0].equals("modelCompare_sameOrNew")){
+					if (lastModel.equals(values[1])) {
+						maxEfficiencyPolicy = new MaxLE_ModelComp_sameOrNew_auc(sortedByValue, lastPred, lastCogL);
+					}else {
+						maxEfficiencyPolicy = new MaxLE_ModelComp_sameOrNew_auc(sortedByValue, 0.0f, 0);
+					}
 				}else {
 					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPred, lastCogL);
 				}
@@ -226,6 +233,7 @@ public class PuzzlePredictionsMain {
 				}
 				writerPred.write( "\n");
 				
+				lastModel = values[1];
 				lastPred = Float.parseFloat( values[3] );
 				lastCogL = Integer.parseInt( values[2] );
 			}

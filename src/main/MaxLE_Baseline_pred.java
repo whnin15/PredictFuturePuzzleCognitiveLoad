@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * @author Wint Hnin
  */
-public class Baseline_maxLE_pred implements Policy{
+public class MaxLE_Baseline_pred implements Policy{
 	
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
 	private float lastPred;
@@ -22,7 +22,7 @@ public class Baseline_maxLE_pred implements Policy{
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
 	private HashMap<Float, Integer> pred_cogLMap = new HashMap<>();
 
-	public Baseline_maxLE_pred(HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
+	public MaxLE_Baseline_pred(HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
 		this.lastPred = lastPred;
 		this.lastCogL = lastCogL;

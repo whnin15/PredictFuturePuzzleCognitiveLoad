@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * @author Wint Hnin
  */
-public class Baseline_maxLE_auc implements Policy{
+public class MaxLE_Baseline_auc implements Policy{
 	
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
 	private float lastPred;
@@ -22,7 +22,7 @@ public class Baseline_maxLE_auc implements Policy{
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
 	private HashMap<Integer, Float> level_predMap = new HashMap<>();
 
-	public Baseline_maxLE_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
+	public MaxLE_Baseline_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
 		this.lastPred = lastPred;
 		this.lastCogL = lastCogL;
@@ -52,8 +52,10 @@ public class Baseline_maxLE_auc implements Policy{
 		getUniquePredValuesGreaterThanPrevCogL();
 		
 		for (Integer level : level_predMap.keySet()) {
+			System.out.print(level + ": " + level_predMap.get(level) + ", ");
 			assignPredictionLevel(level, level_predMap.get(level));
 		}
+		System.out.println();
 		return predToSuggest;
 	}
 	
