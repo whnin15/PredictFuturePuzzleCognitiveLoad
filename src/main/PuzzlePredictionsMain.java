@@ -133,6 +133,8 @@ public class PuzzlePredictionsMain {
 			int lastCogL = -10;
 			float last_lastPred = -10f;
 			int last_lastCogL = -10;
+			float third_lastPred = -10f;
+			int third_lastCogL = -10;
 
 			System.out.println(user.getName().substring(0,user.getName().length()-4 ) );
 			String userName = user.getName().substring(0,user.getName().length()-4 );
@@ -195,7 +197,9 @@ public class PuzzlePredictionsMain {
 					boolean isNoise = false;
 					if (last_lastCogL != -10){
 						if( ((last_lastCogL - lastCogL) * (last_lastPred - lastPred)) < 0) {
-							isNoise = true;
+							if (third_lastCogL == -10 || ((third_lastCogL-last_lastCogL) * (third_lastPred-last_lastPred)) >= 0) {
+								isNoise = true;
+							}
 						}
 					}
 					maxEfficiencyPolicy = new MaxLE_Noise_sameOrNew_auc(sortedByValue, lastPred, lastCogL, isNoise);
@@ -203,7 +207,9 @@ public class PuzzlePredictionsMain {
 					boolean isNoise = false;
 					if (last_lastCogL != -10){
 						if( ((last_lastCogL - lastCogL) * (last_lastPred - lastPred)) < 0) {
-							isNoise = true;
+							if (third_lastCogL == -10 || ((third_lastCogL-last_lastCogL) * (third_lastPred-last_lastPred)) >= 0) {
+								isNoise = true;
+							} 
 						}
 					}
 					maxEfficiencyPolicy = new MaxLE_Noise_linearEq_auc(sortedByValue, lastPred, lastCogL, puzzle_model_map, isNoise);
@@ -252,6 +258,8 @@ public class PuzzlePredictionsMain {
 				writerPred.write( "\n");
 				
 				lastModel = values[1];
+				third_lastPred = last_lastPred;
+				third_lastCogL = last_lastCogL;
 				last_lastPred = lastPred;
 				last_lastCogL = lastCogL;
 				lastPred = Float.parseFloat( values[3] );
