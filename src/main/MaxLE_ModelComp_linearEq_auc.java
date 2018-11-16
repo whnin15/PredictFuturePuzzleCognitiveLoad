@@ -1,11 +1,8 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author Wint Hnin
@@ -24,7 +21,7 @@ public class MaxLE_ModelComp_linearEq_auc implements Policy{
 	private ArrayList<Float> undesiredChoicePred = new ArrayList<>();
 	private HashMap<Float,Integer> pred_levelMap = new HashMap<>();
 	
-	private HashMap<String, float[]> linearModelMap = new HashMap<>();
+	private linearModel lm = new linearModel();
 
 	public MaxLE_ModelComp_linearEq_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL, String lastModel, HashMap<String, String> puzzle_model_map) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
@@ -32,18 +29,11 @@ public class MaxLE_ModelComp_linearEq_auc implements Policy{
 		this.lastCogL = lastCogL;
 		this.lastModel = lastModel;
 		this.puzzle_model_map = puzzle_model_map;
-
-		linearModelMap.put("T", new float[]{(float) 0.2605, (float) 0.8507});
-		linearModelMap.put("C", new float[]{(float) 2.577, (float) 1.631});
-		linearModelMap.put("CbCe", new float[]{(float) -0.2449, (float) 0.8603});
-		linearModelMap.put("CbTe", new float[]{(float) 0.9401, (float) 1.2335});
-		linearModelMap.put("TbCe", new float[]{(float) -0.1969, (float) 0.8128});
-		linearModelMap.put("CbTe/TbCe", new float[]{(float) 1.325, (float) 1.167});
-		linearModelMap.put("TbOe", new float[]{(float) 0.03394, (float) 1.07021});
-		linearModelMap.put("TbObTee", new float[]{(float) -0.0284, (float) 0.9553});
-		linearModelMap.put("TbObCee", new float[]{(float) -0.3333, (float) 0});
-		linearModelMap.put("TbCOe", new float[]{(float) -1.667, (float) 0});
-		linearModelMap.put("TbCObTee", new float[]{(float) 5, (float) 0});
+		
+		if (this.lastCogL == -10) { // begin
+			this.lastPred = 0f;
+			this.lastCogL = 0;
+		}
 	}
 	
 	public ArrayList<String> choosePuzzleSet() {
@@ -108,29 +98,24 @@ public class MaxLE_ModelComp_linearEq_auc implements Policy{
 			}
 		}else {
 			// use linear model
-			float[] linearModel = linearModelMap.get(puzzleModel);
 			if (lastCogL > 1) {
-				if (pred < getPredFromLM(0, linearModel[0], linearModel[1])) {
+				if (pred < lm.getPredFromLM(puzzleModel, 0)) {
 					addToArray(predToSuggest, pred);
 				}else {
 					addToArray(undesiredChoicePred, pred);
 				}
 			}else {
-				if (pred >= getPredFromLM(-1, linearModel[0], linearModel[1]) && pred <= getPredFromLM(1, linearModel[0], linearModel[1])) {
+				if (pred >= lm.getPredFromLM(puzzleModel, -1 ) && pred <= lm.getPredFromLM(puzzleModel, 1 )) {
 					addToArray(predToSuggest, pred);
-				}else if (pred >= getPredFromLM(-2, linearModel[0], linearModel[1]) && pred <= getPredFromLM(2, linearModel[0], linearModel[1])) {
+				}else if (pred >= lm.getPredFromLM(puzzleModel, -2 ) && pred <= lm.getPredFromLM(puzzleModel, 2 )) {
 					addToArray(secondChoicePred, pred);
-				}else if (pred < getPredFromLM(-2, linearModel[0], linearModel[1])) {
+				}else if (pred < lm.getPredFromLM(puzzleModel, -2 )) {
 					addToArray(thirdChoicePred, pred);
 				}else {
 					addToArray(undesiredChoicePred, pred);
 				}
 			}
 		}
-	}
-	
-	private float getPredFromLM(float cogL, float intercept, float slope) {
-		return ((cogL - intercept) / slope);
 	}
 
 	private ArrayList<Float> getUniquePredValuesSameAsPrevCogL() {

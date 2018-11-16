@@ -213,6 +213,16 @@ public class PuzzlePredictionsMain {
 						}
 					}
 					maxEfficiencyPolicy = new MaxLE_Noise_linearEq_auc(sortedByValue, lastPred, lastCogL, puzzle_model_map, isNoise);
+				} else if (args[0].equals("modelAndNoise_linearEq")){
+					boolean isNoise = false;
+					if (last_lastCogL != -10){
+						if( ((last_lastCogL - lastCogL) * (last_lastPred - lastPred)) < 0) {
+							if (third_lastCogL == -10 || ((third_lastCogL-last_lastCogL) * (third_lastPred-last_lastPred)) >= 0) {
+								isNoise = true;
+							} 
+						}
+					}
+					maxEfficiencyPolicy = new MaxLE_ModelAndNoise_linearEq_auc(sortedByValue, lastPred, lastCogL, lastModel, puzzle_model_map, isNoise);
 				} else {
 					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPred, lastCogL);
 				}

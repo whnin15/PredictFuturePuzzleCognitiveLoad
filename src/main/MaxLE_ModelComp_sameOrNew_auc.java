@@ -1,11 +1,8 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author Wint Hnin
@@ -30,6 +27,11 @@ public class MaxLE_ModelComp_sameOrNew_auc implements Policy{
 		this.lastCogL = lastCogL;
 		this.lastModel = lastModel;
 		this.puzzle_model_map = puzzle_model_map;
+		
+		if (this.lastCogL == -10) {
+			this.lastPred = 0f;
+			this.lastCogL = 0;
+		}
 	}
 	
 	public ArrayList<String> choosePuzzleSet() {

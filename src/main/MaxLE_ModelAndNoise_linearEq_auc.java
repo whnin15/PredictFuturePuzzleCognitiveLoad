@@ -7,11 +7,12 @@ import java.util.HashMap;
 /**
  * @author Wint Hnin
  */
-public class MaxLE_Noise_linearEq_auc implements Policy{
+public class MaxLE_ModelAndNoise_linearEq_auc implements Policy{
 	
 	private HashMap<String, Float> sortedAllPuzzle_PredMap;
 	private float lastPred = 0.0f;
 	private int lastCogL = 0;
+	private String lastModel = "";
 	private boolean isNoise;
 	HashMap<String, String> puzzle_model_map;
 
@@ -23,12 +24,13 @@ public class MaxLE_Noise_linearEq_auc implements Policy{
 	
 	private linearModel lm = new linearModel();
 
-	public MaxLE_Noise_linearEq_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL, HashMap<String, String> puzzle_model_map, boolean isNoise) {
+	public MaxLE_ModelAndNoise_linearEq_auc (HashMap<String,Float> sortedAllPuzzle_PredMap, float lastPred, int lastCogL, String lastModel, HashMap<String, String> puzzle_model_map, boolean isNoise) {
 		this.sortedAllPuzzle_PredMap = sortedAllPuzzle_PredMap;
 		this.lastPred = lastPred;
 		this.lastCogL = lastCogL;
+		this.lastModel = lastModel;
 		this.isNoise = isNoise;
-		this.puzzle_model_map = puzzle_model_map;
+		this.puzzle_model_map = puzzle_model_map; 
 		
 		if (this.lastCogL == -10) { // begin
 			this.lastPred = 0f;
@@ -72,7 +74,11 @@ public class MaxLE_Noise_linearEq_auc implements Policy{
 	}
 	
 	private void assignPredictionLevel(float pred, int level, String puzzleName, String puzzleModel) {
-		if (!isNoise) {
+		boolean isSameModel = false;
+		if (puzzleModel.equals(lastModel)) {
+			isSameModel = true;
+		}
+		if (isSameModel || !isNoise) {
 			// give -1 and 1 all the time or as close to that as possible, or if the lastCogL > 1, give < 0.
 			if (lastCogL > 1) {
 				int targetLevel = -1 - lastCogL;
@@ -95,17 +101,17 @@ public class MaxLE_Noise_linearEq_auc implements Policy{
 		}else {
 			// use linear model
 			if (lastCogL > 1) {
-				if (pred < lm.getPredFromLM(puzzleModel, 0)) {
+				if (pred < lm.getPredFromLM(puzzleModel, 0 )) {
 					addToArray(predToSuggest, pred);
 				}else {
 					addToArray(undesiredChoicePred, pred);
 				}
 			}else {
-				if (pred >= lm.getPredFromLM(puzzleModel, -1) && pred <= lm.getPredFromLM(puzzleModel, 1)) {
+				if (pred >= lm.getPredFromLM(puzzleModel, -1 ) && pred <= lm.getPredFromLM(puzzleModel, 1 )) {
 					addToArray(predToSuggest, pred);
-				}else if (pred >= lm.getPredFromLM(puzzleModel, -2) && pred <= lm.getPredFromLM(puzzleModel, 2)) {
+				}else if (pred >= lm.getPredFromLM(puzzleModel, -2 ) && pred <= lm.getPredFromLM(puzzleModel, 2 )) {
 					addToArray(secondChoicePred, pred);
-				}else if (pred < lm.getPredFromLM(puzzleModel, -2)) {
+				}else if (pred < lm.getPredFromLM(puzzleModel, -2 )) {
 					addToArray(thirdChoicePred, pred);
 				}else {
 					addToArray(undesiredChoicePred, pred);
