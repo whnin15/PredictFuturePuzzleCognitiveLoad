@@ -56,7 +56,7 @@ public class MaxLE_ModelAndNoise_linearEq_auc implements Policy{
 		
 		for (String puzzleName : sortedAllPuzzle_PredMap.keySet()) {
 			float prediction = sortedAllPuzzle_PredMap.get(puzzleName);
-			assignPredictionLevel(prediction, pred_levelMap.get(prediction), puzzleName, puzzle_model_map.get(puzzleName));
+			assignPredictionLabel(prediction, pred_levelMap.get(prediction), puzzle_model_map.get(puzzleName));
 		}
 		return predToSuggest;
 	}
@@ -73,7 +73,7 @@ public class MaxLE_ModelAndNoise_linearEq_auc implements Policy{
 		return undesiredChoicePred;
 	}
 	
-	private void assignPredictionLevel(float pred, int level, String puzzleName, String puzzleModel) {
+	private void assignPredictionLabel(float pred, int level, String puzzleModel) {
 		boolean isSameModel = false;
 		if (puzzleModel.equals(lastModel)) {
 			isSameModel = true;

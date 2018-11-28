@@ -184,7 +184,7 @@ public class PuzzlePredictionsMain {
 											.collect(
 													Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2,
 													LinkedHashMap::new));
-				Policy maxEfficiencyPolicy;
+				Policy maxEfficiencyPolicy = null;
 				if (args[0].equals("baseline_pred")) {
 					maxEfficiencyPolicy = new MaxLE_Baseline_pred(sortedByValue, lastPred, lastCogL);
 				} else if (args[0].equals("baseline_auc")){
@@ -223,8 +223,16 @@ public class PuzzlePredictionsMain {
 						}
 					}
 					maxEfficiencyPolicy = new MaxLE_ModelAndNoise_linearEq_auc(sortedByValue, lastPred, lastCogL, lastModel, puzzle_model_map, isNoise);
-				} else {
-					maxEfficiencyPolicy = new MaxLearningEfficiencyPolicy(sortedByValue, lastPred, lastCogL);
+				} else if (args[0].equals("maxEngagement_alternate")){
+					boolean isNoise = false;
+					if (last_lastCogL != -10){
+						if( ((last_lastCogL - lastCogL) * (last_lastPred - lastPred)) < 0) {
+							if (third_lastCogL == -10 || ((third_lastCogL-last_lastCogL) * (third_lastPred-last_lastPred)) >= 0) {
+								isNoise = true;
+							} 
+						}
+					}
+					maxEfficiencyPolicy = new maxEngagement_alternate(sortedByValue, lastPred, lastCogL, last_lastPred, last_lastCogL, lastModel, puzzle_model_map, isNoise);
 				}
 				
 				ArrayList<Float> prefPredSet = maxEfficiencyPolicy.getSuitablePredictions();
